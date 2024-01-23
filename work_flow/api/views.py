@@ -1,4 +1,3 @@
-from django.contrib.auth.models import Group
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
@@ -24,15 +23,7 @@ class RequestView(ModelViewSet):
 
 class ResponseView(ModelViewSet):
     permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        group_supervisor = Group.objects.get(name='سرپرست')
-        group_manager = Group.objects.get(name='مدیر')
-        group_user = self.request.user.groups.all()
-        if group_supervisor in group_user:
-            return Requests.objects.filter(status='posted', parent=None)
-        elif group_manager in group_user:
-            return Requests.objects.filter(status='accepted_supervisor', parent=None)
+    queryset = Requests.objects.filter(parent=None)
 
     def get_serializer_class(self):
         if self.action == 'create' or self.action == 'update' or self.action == 'partial_update':
