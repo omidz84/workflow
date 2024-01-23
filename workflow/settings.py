@@ -33,6 +33,7 @@ INSTALLED_APPS = [
 
     'user',
     'work_flow',
+    'check_system_init',
 ]
 
 MIDDLEWARE = [
