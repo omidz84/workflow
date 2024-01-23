@@ -45,7 +45,7 @@ class ResponseCreateSerializer(serializers.ModelSerializer):
             name=validated_data['name'],
             description=validated_data['description'],
             created_by=validated_data['created_by'],
-            status='posted',
+            status=validated_data['status'],
             parent=validated_data['parent']
         )
         if response.parent.parent is None:

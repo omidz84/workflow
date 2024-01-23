@@ -1,0 +1,54 @@
+version: '3.7'
+
+services: 
+#Postgres-----------------------------------------------------------------------------------------
+    workflow-postgres:
+        image: postgis/postgis:latest
+        container_name: workflow_postgresql
+        hostname: workflow_postgresql
+        environment:
+            - POSTGRES_DB=workflow_db
+            - POSTGRES_USER=workflow_user
+            - POSTGRES_PASSWORD=hdfjhsfhsdfg
+        ports:
+            - "5432:5432"
+        volumes:
+            - workflow_postgresql_data:/var/lib/postgresql/data
+        networks:
+            - workflow
+        restart: on-failure
+
+#API-----------------------------------------------------------------------------------------
+    workflow-api:
+        image: workflow-api:latest
+        container_name: workflow-api
+        hostname: workflow_api
+        depends_on:
+            - workflow-postgres
+        ports:
+            - "8088:8088"
+        # command: ["ping", "8.8.8.8"]
+        env_file:
+            - .env
+        volumes:
+            - workflow_media_data:/app/media
+            - workflow_static_data:/app/static
+        networks:
+            - workflow
+        restart: on-failure
+
+
+
+volumes:
+    workflow_media_data:
+        external: true
+    workflow_static_data:
+        external: true
+    workflow_postgresql_data:
+        external: true
+
+
+networks:
+    workflow:
+        external: true
+        name: workflow_net
