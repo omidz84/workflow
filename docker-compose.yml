@@ -27,7 +27,6 @@ services:
             - workflow-postgres
         ports:
             - "8088:8088"
-        # command: ["ping", "8.8.8.8"]
         env_file:
             - .env
         volumes:
